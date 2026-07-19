@@ -1,0 +1,78 @@
+# ============================================
+# BC-Transformer 策略网络配置
+# ============================================
+# BCTransformerPolicy: Behavior Cloning with Transformer
+# 使用 Transformer 架构进行行为克隆的策略配置
+
+# 策略类型
+# BCTransformerPolicy: 基于Transformer的行为克隆策略
+# Transformer 使用自注意力机制处理时序信息
+policy_type: BCTransformerPolicy
+
+# ============================================
+# 额外的全连接层配置
+# ============================================
+
+# 在 Transformer 之前/之后添加的额外层数
+# 0: 不添加额外层
+# 如果设为 >0，会在输入/输出处添加额外的全连接层
+extra_num_layers: 0
+
+# 额外层的隐藏维度
+# 128: 每个额外全连接层的神经元数量
+extra_hidden_size: 128
+
+# 统一的嵌入维度
+# 64: 图像、语言、状态等特征统一映射到的维度
+# 便于在 Transformer 中进行多模态融合
+embed_size: 64
+
+# ============================================
+# Transformer 编码器配置
+# ============================================
+
+# Transformer 输入维度
+# null: 自动根据各模态嵌入维度计算
+# 可手动指定以覆盖自动计算值
+transformer_input_size: null
+
+# Transformer 层数
+# 4: 编码器堆叠4层 Transformer block
+# 更多的层数可以增强表达能力，但增加计算量和参数量
+transformer_num_layers: 4
+
+# 多头注意力的头数
+# 6: 将注意力机制分为6个并行头
+# 头数越多，可以捕捉更多样化的特征关系，但需要能被嵌入维度整除
+transformer_num_heads: 6
+
+# 每个注意力头的输出维度
+# 64: 每个头输出的维度
+# 总输出维度 = head_output_size × num_heads
+transformer_head_output_size: 64
+
+# Transformer 中 MLP 隐藏层大小
+# 256: Feed-Forward 网络的隐藏层维度
+# 通常是输入维度的2-4倍
+transformer_mlp_hidden_size: 256
+
+# Dropout 比率
+# 0.1: 训练时随机丢弃10%的神经元
+# 用于防止过拟合，提高泛化能力
+transformer_dropout: 0.1
+
+# 最大序列长度
+# 10: Transformer 处理的最大时间步数
+# 应与 data config 中的 seq_len 保持一致
+transformer_max_seq_len: 10
+
+# ============================================
+# 默认子模块配置
+# ============================================
+defaults:
+    - data_augmentation@color_aug: batch_wise_img_color_jitter_group_aug.yaml
+    - data_augmentation@translation_aug: translation_aug.yaml
+    - image_encoder: resnet_encoder.yaml
+    - language_encoder: mlp_encoder.yaml
+    - position_encoding@temporal_position_encoding: sinusoidal_position_encoding.yaml
+    - policy_head: gmm_head.yaml

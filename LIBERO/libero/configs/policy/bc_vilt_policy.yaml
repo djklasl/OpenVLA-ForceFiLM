@@ -1,0 +1,110 @@
+# ============================================
+# BC-ViLT 策略网络配置
+# ============================================
+# BCViLTPolicy: Behavior Cloning with Vision-and-Language Transformer
+# 使用视觉-语言联合 Transformer 进行行为克隆的策略配置
+
+# 策略类型
+# BCViLTPolicy: 基于 ViLT 的行为克隆策略
+# ViLT (Vision-and-Language Transformer) 联合处理图像和文本
+policy_type: BCViLTPolicy
+
+# ============================================
+# 额外的全连接层配置
+# ============================================
+
+# 在 ViLT 之前/之后添加的额外层数
+# 0: 不添加额外层
+extra_num_layers: 0
+
+# 额外层的隐藏维度
+# 128: 每个额外全连接层的神经元数量
+extra_hidden_size: 128
+
+# 统一的嵌入维度
+# 128: 各模态特征统一映射到的维度
+embed_size: 128
+
+# ============================================
+# 空间 Transformer 配置 (处理空间特征)
+# ============================================
+
+# 空间 Transformer 输入维度
+# null: 自动根据输入计算
+spatial_transformer_input_size: null
+
+# 空间 Transformer 层数
+# 7: 空间特征处理使用7层 Transformer
+# 较深的网络用于捕捉精细的空间关系
+spatial_transformer_num_layers: 7
+
+# 空间 Transformer 注意力头数
+# 8: 空间注意力使用8个头
+spatial_transformer_num_heads: 8
+
+# 空间 Transformer 每个头的输出维度
+# 120: 每个空间注意力头的输出维度
+spatial_transformer_head_output_size: 120
+
+# 空间 Transformer MLP 隐藏层大小
+# 256: Feed-Forward 网络的隐藏层维度
+spatial_transformer_mlp_hidden_size: 256
+
+# 空间 Transformer Dropout 比率
+# 0.1: 训练时随机丢弃10%的神经元
+spatial_transformer_dropout: 0.1
+
+# ============================================
+# 空间下采样配置
+# ============================================
+
+# 是否进行空间下采样
+# true: 对空间特征进行下采样，减少计算量
+spatial_down_sample: true
+
+# 下采样后的嵌入维度
+# 64: 下采样后的特征维度
+spatial_down_sample_embed_size: 64
+
+# ============================================
+# 时序 Transformer 配置 (处理时序特征)
+# ============================================
+
+# 时序 Transformer 输入维度
+# null: 自动根据输入计算
+transformer_input_size: null
+
+# 时序 Transformer 层数
+# 4: 时序特征处理使用4层 Transformer
+transformer_num_layers: 4
+
+# 时序 Transformer 注意力头数
+# 6: 时序注意力使用6个头
+transformer_num_heads: 6
+
+# 时序 Transformer 每个头的输出维度
+# 64: 每个时序注意力头的输出维度
+transformer_head_output_size: 64
+
+# 时序 Transformer MLP 隐藏层大小
+# 256: Feed-Forward 网络的隐藏层维度
+transformer_mlp_hidden_size: 256
+
+# 时序 Transformer Dropout 比率
+# 0.1: 训练时随机丢弃10%的神经元
+transformer_dropout: 0.1
+
+# 时序 Transformer 最大序列长度
+# 10: 最多处理10个时间步
+transformer_max_seq_len: 10
+
+# ============================================
+# 默认子模块配置
+# ============================================
+defaults:
+    - data_augmentation@color_aug: batch_wise_img_color_jitter_group_aug.yaml
+    - data_augmentation@translation_aug: translation_aug.yaml
+    - image_encoder: patch_encoder.yaml
+    - language_encoder: mlp_encoder.yaml
+    - position_encoding@temporal_position_encoding: sinusoidal_position_encoding.yaml
+    - policy_head: gmm_head.yaml

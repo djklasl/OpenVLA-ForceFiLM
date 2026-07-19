@@ -1,0 +1,28 @@
+# ============================================
+# 正弦位置编码配置
+# ============================================
+# SinusoidalPositionEncoding: 使用正弦/余弦函数编码位置信息
+# 基于 Transformer 论文中的位置编码方法，为序列中的每个位置生成唯一编码
+
+# 网络类型
+# SinusoidalPositionEncoding: 正弦位置编码
+# 不同频率的正弦/余弦函数组合表示位置
+network: SinusoidalPositionEncoding
+
+# 网络参数配置
+network_kwargs:
+    # 输入维度
+    # null: 自动根据嵌入维度确定
+    # 可手动指定位置编码的维度
+    input_size: null
+
+    # 逆频率因子
+    # 10: 控制位置编码的频率范围
+    # 较大的值产生更平滑的编码，较小的值产生更高频的变化
+    # 公式: 1 / (10000^(2i/d))
+    inv_freq_factor: 10
+
+    # 频率比例因子
+    # null: 使用默认的频率缩放
+    # 可调整位置编码在不同维度上的频率分布
+    factor_ratio: null

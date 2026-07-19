@@ -1,0 +1,22 @@
+# ============================================
+# Patch 图像编码器配置
+# ============================================
+# PatchEncoder: 将图像分割为小块（patches）进行编码
+# 类似 Vision Transformer (ViT) 的处理方式，适合 Transformer 架构
+
+# 网络类型
+# PatchEncoder: 使用 patch-based 编码方式
+network: PatchEncoder
+
+# 网络参数配置
+network_kwargs:
+    # Patch 尺寸
+    # [8, 8]: 将图像分割为 8×8 像素的块
+    # 例如：128×128 的图像会被分割为 16×16 = 256 个 patches
+    # 较小的 patch_size 保留更多细节，但计算量更大
+    patch_size: [8, 8]
+
+    # Patch 嵌入层是否使用偏置
+    # false: 使用偏置项（常规做法）
+    # true: 不使用偏置，可减少参数量
+    no_patch_embed_bias: false

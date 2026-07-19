@@ -1,0 +1,36 @@
+# ============================================
+# CLIP 语言编码器配置
+# ============================================
+# CLIPEncoder: 使用 OpenAI CLIP 模型编码语言特征
+# CLIP 是一个视觉-语言预训练模型，擅长理解图像和文本的关联
+
+# 网络类型
+# CLIPEncoder: 基于 CLIP 的语言编码器
+network: CLIPEncoder
+
+# 网络参数配置
+network_kwargs:
+    # CLIP 模型类型
+    # "ViT-B/32": 使用 Vision Transformer 作为图像编码器的 CLIP 模型
+    # 可选配置:
+    #   - "ViT-B/32": ViT-Base, patch size 32
+    #   - "ViT-B/16": ViT-Base, patch size 16 (更精细)
+    #   - "RN50": ResNet-50
+    #   - "RN101": ResNet-101
+    model_type: "ViT-B/32"
+
+    # 隐藏层维度
+    # 128: CLIP 特征后的投影层维度
+    hidden_size: 128
+
+    # 输出维度
+    # 128: 最终语言嵌入的维度
+    output_size: 128
+
+    # 后续 MLP 层数
+    # 1: 在 CLIP 输出后添加1层全连接
+    num_layers: 1
+
+    # CLIP 模型下载/缓存路径
+    # "./clip": 模型将保存在当前目录下的 clip 文件夹
+    download_path: "./clip"

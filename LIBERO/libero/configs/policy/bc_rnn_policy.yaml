@@ -1,0 +1,63 @@
+# ============================================
+# BC-RNN 策略网络配置
+# ============================================
+# BCRNNPolicy: Behavior Cloning with Recurrent Neural Network
+# 使用 RNN（循环神经网络）进行行为克隆的策略配置
+
+# 策略类型
+# BCRNNPolicy: 基于RNN的行为克隆策略，适合处理时序依赖关系
+policy_type: BCRNNPolicy
+
+# ============================================
+# 嵌入维度配置
+# ============================================
+
+# 图像嵌入维度
+# 图像经过编码器后的特征向量维度
+# 64: 将图像压缩为64维特征向量
+image_embed_size: 64
+
+# 文本嵌入维度
+# 语言指令经过编码器后的特征向量维度
+# 32: 将文本压缩为32维特征向量
+text_embed_size: 32
+
+# ============================================
+# RNN 网络配置
+# ============================================
+
+# RNN 隐藏层大小
+# 1024: 每个RNN单元的隐藏状态维度
+# 较大的值可以记忆更复杂的状态转移模式
+rnn_hidden_size: 1024
+
+# RNN 层数
+# 2: 堆叠2层RNN，增强模型表达能力
+# 更多层可以学习更复杂的时序模式，但增加计算量
+rnn_num_layers: 2
+
+# RNN Dropout 比率
+# 0.0: 不使用 dropout（训练时不过滤神经元）
+# 如果设为 0.1-0.5，可以在训练时随机丢弃部分神经元以防止过拟合
+rnn_dropout: 0.0
+
+# 是否使用双向 RNN
+# false: 单向RNN，只考虑过去的信息（前向）
+# true: 双向RNN，同时考虑过去和未来（需要完整序列，不适合在线推理）
+rnn_bidirectional: false
+
+# ============================================
+# 默认子模块配置
+# ============================================
+# 通过 Hydra defaults 加载子模块配置
+# data_augmentation@color_aug: 颜色增强
+# data_augmentation@translation_aug: 平移增强
+# image_encoder: 图像编码器
+# language_encoder: 语言编码器
+# policy_head: 策略输出头
+defaults:
+    - data_augmentation@color_aug: batch_wise_img_color_jitter_group_aug.yaml
+    - data_augmentation@translation_aug: translation_aug.yaml
+    - image_encoder: resnet_encoder
+    - language_encoder: mlp_encoder
+    - policy_head: gmm_head

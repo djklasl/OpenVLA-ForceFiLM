@@ -1,0 +1,21 @@
+# ============================================
+# 余弦退火学习率调度器配置
+# ============================================
+# CosineAnnealingLR: 使用余弦函数周期性地调整学习率
+# 学习率按照余弦曲线从初始值逐渐降低到最小值
+
+# 调度器类型
+# torch.optim.lr_scheduler.CosineAnnealingLR: PyTorch 内置的余弦退火调度器
+name: torch.optim.lr_scheduler.CosineAnnealingLR
+
+# 调度器参数
+kwargs:
+    # 最小学习率
+    # 1e-5: 0.00001，学习率的下限
+    # 学习率会在训练过程中从初始值逐渐降低到此值
+    eta_min: 1e-5
+
+    # 起始轮次
+    # -1: 从第0个epoch开始调度
+    # 如果设置为大于0的值，可以从中间某个epoch恢复调度
+    last_epoch: -1

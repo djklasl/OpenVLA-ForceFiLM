@@ -1,0 +1,101 @@
+# @package _global_
+# ============================================
+# LIBERO 项目主配置文件
+# ============================================
+# 此文件使用 Hydra 配置管理系统，支持配置继承和覆盖
+# @package _global_ 表示此配置应用于全局命名空间
+
+# ============================================
+# 默认配置加载
+# ============================================
+defaults:
+  - _self_  # 当前配置文件中的设置优先级最高
+  - data: default          # 加载 data/default.yaml（数据集配置）
+  - policy: bc_transformer_policy  # 加载 policy/bc_transformer_policy.yaml（策略网络配置）
+  - train: default         # 加载 train/default.yaml（训练配置）
+  - eval: default          # 加载 eval/default.yaml（评估配置）
+  - lifelong: base         # 加载 lifelong/base.yaml（终身学习配置）
+  - test: null             # 测试配置（未启用）
+
+# ============================================
+# 全局实验配置
+# ============================================
+
+# 随机种子
+# 用于确保实验可重复性
+# 10000 是一个较大的种子值，避免随机性
+seed: 10000
+
+# 是否使用 Weights & Biases (wandb) 进行实验跟踪
+# true: 自动记录训练过程中的损失、指标等
+# false: 不使用 wandb
+use_wandb: false
+
+# WandB 项目名称
+# 当 use_wandb=true 时，实验将记录到该项目下
+wandb_project: "lifelong learning"
+
+# 数据集根目录
+# null: 使用项目默认路径
+# 可指定自定义路径，如: "/path/to/libero/datasets"
+folder: null # use default path
+
+# BDDL 文件夹路径
+# BDDL (Behavior Domain Definition Language) 是任务描述文件
+# null: 使用项目默认路径
+bddl_folder: null # use default path
+
+# 初始状态文件夹路径
+# 存储仿真环境的初始场景配置
+# null: 使用项目默认路径
+init_states_folder: null # use default path
+
+# 是否加载之前的模型
+# true: 从检查点继续训练
+# false: 从头开始训练
+load_previous_model: false
+
+# 计算设备
+# "cuda": 使用 NVIDIA GPU
+# "cpu": 使用 CPU（不推荐，训练会非常慢）
+device: "cuda"
+
+# ============================================
+# 任务嵌入配置
+# ============================================
+
+# 任务嵌入格式
+# "bert": 使用 BERT 模型编码任务描述
+# 可选值可能包括: "bert", "gpt", "clip", "one_hot" 等
+task_embedding_format: "bert"
+
+# 任务独热编码偏移量
+# 当使用 one_hot 编码时，任务ID从1开始（0保留用于特殊用途）
+# 值为1表示 task_id=1 对应独热向量 [0,1,0,0,...]
+task_embedding_one_hot_offset: 1
+
+# ============================================
+# 预训练模型配置
+# ============================================
+
+# 是否使用预训练模型
+# true: 加载预训练权重进行微调
+# false: 从随机初始化开始训练
+pretrain: false
+
+# 预训练模型路径
+# 当 pretrain=true 时使用
+# 示例: "path/to/pretrained_model.pth"
+pretrain_model_path: ""
+
+# ============================================
+# Benchmark 选择
+# ============================================
+
+# Benchmark 数据集名称
+# LIBERO 提供多个不同难度的基准测试数据集：
+# - "LIBERO_SPATIAL": 空间推理任务（如 "把物体放到目标位置"）
+# - "LIBERO_OBJECT": 物体操作任务
+# - "LIBERO_GOAL": 目标导向任务
+# - "LIBERO_LONG": 长时序任务
+benchmark_name: "LIBERO_SPATIAL"

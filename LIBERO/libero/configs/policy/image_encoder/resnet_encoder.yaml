@@ -1,0 +1,37 @@
+# ============================================
+# ResNet 图像编码器配置
+# ============================================
+# ResnetEncoder: 使用 ResNet (Residual Network) 作为图像特征提取器
+# ResNet 是一种经典的卷积神经网络，通过残差连接解决深层网络训练问题
+
+# 网络类型
+# ResnetEncoder: 使用 ResNet 架构编码图像
+network: ResnetEncoder
+
+# 网络参数配置
+network_kwargs:
+    # 是否使用预训练权重
+    # false: 从随机初始化开始训练
+    # true: 使用在 ImageNet 等大型数据集上预训练的权重（可以加快收敛）
+    pretrained: false
+
+    # 是否冻结网络参数
+    # false: 所有参数都参与训练更新
+    # true: 冻结 ResNet 参数，只训练后续层（用于特征提取场景）
+    freeze: false
+
+    # 移除的层数
+    # 4: 从 ResNet 末尾移除4层（包括全连接层等）
+    # 保留前面的卷积层用于特征提取，移除分类头
+    remove_layer_num: 4
+
+    # 是否禁用步长（stride）
+    # false: 使用正常的下采样步长（通常为2）
+    # true: 将步长设为1，保持更高的空间分辨率
+    no_stride: false
+
+    # 语言融合方式
+    # 'film': FiLM (Feature-wise Linear Modulation) 方法
+    #   通过仿射变换将语言特征融入视觉特征
+    # 其他可能的方式包括: 'concat', 'attention', 'cross_attention' 等
+    language_fusion: 'film'
